@@ -36,10 +36,70 @@ const Ticket = ({ handleTicketShow }) => {
   );
 };
 
+const EventSaved = ({ setShowEventSaved, setShowTicket }) => {
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center">
+      <div className="bg-[#1b1b1b] rounded-xl relative md:p-4 p-1 w-[300px] flex justify-center items-center flex-col">
+        <p className="text-white font-semibold text-[12px] mt-2">
+          Event Saved! Do you want to add a ticket?
+        </p>
+        <div className="flex justify-between items-center gap-3">
+          <button
+            className="bg-[#7A844A] text-[#0F0F10] py-2 px-4 rounded-[9px] mt-4 text-[13px] font-bold"
+            onClick={() => setShowEventSaved(false)}
+          >
+            No
+          </button>
+          <button
+            className="bg-[#7A844A] text-[#0F0F10] py-2 px-4 rounded-[9px] mt-4 text-[13px] font-bold"
+            onClick={() => {
+              setShowEventSaved(false);
+              setShowTicket(true);
+            }}
+          >
+            Yes
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+const TicketSaved = ({ setShowTicketSaved, setShowTicket }) => {
+  return (
+    <div className="fixed inset-0 bg-block bg-opacity-60 flex justify-center items-center">
+      <div className="bg-[#1b1b1b] rounded-xl relative md:p-4 p-1 w-[300px] flex justify-center items-center flex-col">
+        <p className="text-white font-semibold text-[12px] mt-2">
+          Ticket Saved! Do you want to add more tickets?
+        </p>
+        <div className="flex justify-between items-center gap-3">
+          <button
+            className="bg-[#7A844A] text-[#0F0F10] py-2 px-4 rounded-[9px] mt-4 text-[13px] font-bold"
+            onClick={() => setShowTicketSaved(false)}
+          >
+            No
+          </button>
+          <button
+            className="bg-[#7A844A] text-[#0F0F10] py-2 px-4 rounded-[9px] mt-4 text-[13px] font-bold"
+            onClick={() => {
+              setShowTicketSaved(false);
+              setShowTicket(true);
+            }}
+          >
+            Yes
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function Seller() {
   const [showEvent, setShowEvent] = useState(false);
   const [showTicket, setShowTicket] = useState(false);
   const [showTicketDetails, setShowTicketDetails] = useState(false);
+  const [showTicketSaved, setShowTicketSaved] = useState(false);
+  const [showEventSaved, setShowEventSaved] = useState(false);
+
   const handleTicket = () => {
     setShowTicketDetails((prevState) => !prevState);
   };
@@ -439,7 +499,7 @@ export default function Seller() {
       </div>
       {showTicket && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-40">
-          <div className="bg-[#1b1b1b] rounded-xl relative md:p-7 p-3 md:w-[45%] w-[95%] flex justify-center items-center flex-col md:h-[50vh] h-[90vh] overflow-y-scroll no-scrollbar">
+          <div className="bg-[#1b1b1b] rounded-xl relative md:p-7 p-3 md:w-[45%] w-[95%] flex justify-center items-center flex-col md:min-h-[50vh] min-h-[90vh] overflow-y-scroll no-scrollbar">
             <div className="md:flex md:justify-between items-center w-full mt-[10px]">
               <div className="md:w-[32%] w-full">
                 <label className="text-[#B3B3B3] text-[12px]">
@@ -469,6 +529,28 @@ export default function Seller() {
                   className="w-full bg-[#171617] text-white p-3 rounded-xl mt-1 text-[12px] outline-none border-none"
                   type="text"
                   placeholder="Enter price"
+                />
+              </div>
+            </div>
+            <div className="md:flex md:justify-between items-center w-full mt-3">
+              <div className="md:w-[48%] w-[full]">
+                <label className="text-[#B3B3B3] text-[12px]">
+                  Fee to be paid by the buyer
+                </label>
+                <input
+                  className="w-full bg-[#171617] text-white p-3 rounded-xl mt-1 text-[12px] outline-none border-none"
+                  type="number"
+                  placeholder="Enter amount"
+                />
+              </div>
+              <div className="md:w-[48%] w-full">
+                <label className="text-[#B3B3B3] text-[12px]">
+                  Fee to be paid by the seller
+                </label>
+                <input
+                  className="w-full bg-[#171617] text-white p-3 rounded-xl mt-1 text-[12px] outline-none border-none"
+                  type="number"
+                  placeholder="Enter amount"
                 />
               </div>
             </div>
@@ -506,7 +588,13 @@ export default function Seller() {
                 />
               </div>
             </div>
-            <div className="mt-2 w-full" onClick={() => setShowTicket(false)}>
+            <div
+              className="mt-2 w-full"
+              onClick={() => {
+                setShowTicketSaved(true);
+                setShowTicket(false);
+              }}
+            >
               <button className="w-full bg-[#7A844A] text-[#0F0F10] p-3 rounded-[9px] mt-4 text-[13px] font-bold">
                 Save Ticket
               </button>
@@ -518,9 +606,15 @@ export default function Seller() {
           </div>
         </div>
       )}
+      {showTicketSaved && (
+        <TicketSaved
+          setShowTicketSaved={setShowTicketSaved}
+          setShowTicket={setShowTicket}
+        />
+      )}
       {showEvent && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-30 ">
-          <div className="bg-[#1b1b1b] rounded-xl relative md:p-7 p-4 md:w-[55%] w-[95%]  flex justify-center items-center flex-col md:h-[60vh] h-auto overflow-y-scroll no-scrollbar">
+          <div className="bg-[#1b1b1b] rounded-xl relative md:p-7 p-4 md:w-[55%] w-[95%]  flex justify-center items-center flex-col md:min-h-[60vh] h-auto overflow-y-scroll no-scrollbar">
             <div className="md:flex md:justify-between items-center w-full mt-3">
               <div className="w-full">
                 <label className="text-[#B3B3B3] text-[12px]">
@@ -586,21 +680,21 @@ export default function Seller() {
             <div className="md:flex md:justify-between items-center w-full mt-3">
               <div className="md:w-[48%] w-[full]">
                 <label className="text-[#B3B3B3] text-[12px]">
-                  Ticket Starttime
+                  Event Starttime
                 </label>
                 <input
                   className="w-full bg-[#171617] text-white p-3 rounded-xl mt-1 text-[12px] outline-none border-none"
-                  type="date"
+                  type="time"
                   placeholder="Enter starttime"
                 />
               </div>
               <div className="md:w-[48%] w-full">
                 <label className="text-[#B3B3B3] text-[12px]">
-                  Ticket Endtime
+                  Event Endtime
                 </label>
                 <input
                   className="w-full bg-[#171617] text-white p-3 rounded-xl mt-1 text-[12px] outline-none border-none"
-                  type="date"
+                  type="time"
                   placeholder="Enter endtime"
                 />
               </div>
@@ -628,12 +722,12 @@ export default function Seller() {
             <div
               className="mt-2 w-full"
               onClick={() => {
-                setShowTicket(true);
+                setShowEventSaved(true);
                 setShowEvent(false);
               }}
             >
               <button className="w-full bg-[#7A844A] text-[#0F0F10] p-3 rounded-[9px] mt-4 text-[13px] font-bold">
-                Add Ticket
+                Save Event
               </button>
             </div>
             <VscError
@@ -642,6 +736,12 @@ export default function Seller() {
             />
           </div>
         </div>
+      )}
+      {showEventSaved && (
+        <EventSaved
+          setShowEventSaved={setShowEventSaved}
+          setShowTicket={setShowTicket}
+        />
       )}
       {showTicketDetails && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center">
